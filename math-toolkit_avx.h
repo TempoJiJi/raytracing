@@ -4,6 +4,9 @@
 #include <math.h>
 #include <stdio.h>
 #include <assert.h>
+#include <xmmintrin.h>
+#include <immintrin.h>
+#include <avxintrin.h>
 
 static inline __forceinline
 void normalize(double *v)
@@ -33,9 +36,12 @@ void add_vector(const double *a, const double *b, double *out)
 static inline __forceinline
 void subtract_vector(const double *a, const double *b, double *out)
 {
-    out[0] = a[0] - b[0];
-    out[1] = a[1] - b[1];
-    out[2] = a[2] - b[2];
+    __m256d A = _mm256_set_pd(0,a[2],a[1],a[0]);
+    __m256d B = _mm256_set_pd(0,b[2],b[1],b[0]);
+    __m256d OUT = _mm256_sub_pd(A,B);
+    out[0] = OUT[0];
+    out[1] = OUT[1];
+    out[2] = OUT[2];
 }
 
 static inline __forceinline
@@ -65,11 +71,10 @@ void cross_product(const double *v1, const double *v2, double *out)
 static inline __forceinline
 double dot_product(const double *v1, const double *v2)
 {
-    double dp = 0.0;
-    dp += v1[0] * v2[0];
-    dp += v1[1] * v2[1];
-    dp += v1[2] * v2[2];
-    return dp;
+    __m256d x = _mm256_set_pd(0,v1[2],v1[1],v1[0]);
+    __m256d y = _mm256_set_pd(0,v2[2],v2[1],v2[0]);
+    __m256d xy = _mm256_mul_pd(x,y);
+    return (xy[0]+xy[1]+xy[2]);
 }
 
 static inline __forceinline

@@ -4,9 +4,11 @@ all: $(EXEC)
 
 CC ?= gcc
 CFLAGS = \
-	-std=gnu99 -Wall -O0 -g
+	-fopenmp -std=gnu99 -Wall -O0 -g  \
+	-D__forceinline="__attribute__((always_inline))" \
+	-lpthread
 LDFLAGS = \
-	-lm
+	-lm -lgomp -lpthread 
 
 ifeq ($(strip $(PROFILE)),1)
 PROF_FLAGS = -pg
