@@ -466,21 +466,18 @@ void raytracing(void* args)
     int start_j,end_j;
 
     /*	Separate to count the pixels  */
-    if(pthread_equal(pthread_self(),THREAD[0])){
-	start_j = 0;
-	end_j = 128; 
-    }
-    else if(pthread_equal(pthread_self(),THREAD[1])){
-	start_j = 128;
-	end_j = 256;
-    }
-    else if(pthread_equal(pthread_self(),THREAD[2])){
-	start_j = 256;
-	end_j = 384;
-    }
-    else if(pthread_equal(pthread_self(),THREAD[3])){
-	start_j = 384;
-	end_j = 512;
+    if(pthread_equal(pthread_self(),THREAD[0])) {
+        start_j = 0;
+        end_j = 128;
+    } else if(pthread_equal(pthread_self(),THREAD[1])) {
+        start_j = 128;
+        end_j = 256;
+    } else if(pthread_equal(pthread_self(),THREAD[2])) {
+        start_j = 256;
+        end_j = 384;
+    } else if(pthread_equal(pthread_self(),THREAD[3])) {
+        start_j = 384;
+        end_j = 512;
     }
 
     /* calculate u, v, w */
@@ -491,8 +488,8 @@ void raytracing(void* args)
     int factor = sqrt(SAMPLES);
 
     #pragma omp parallel for num_threads(64)	\
-		private(stk), private(d),	\
-		private(object_color)
+    private(stk), private(d),	\
+    private(object_color)
     for (int j = start_j ; j < end_j; j++) {
         for (int i = 0 ; i < (*data).row; i++) {
             double r = 0, g = 0, b = 0;
@@ -504,8 +501,8 @@ void raytracing(void* args)
                                 j * factor + s % factor,
                                 view,
                                 (*data).row * factor, (*data).col * factor);
-                if (ray_color(view->vrp, 0.0, d, &stk,(*data).rectangulars, 
-			      (*data).spheres, (*data).lights, object_color,
+                if (ray_color(view->vrp, 0.0, d, &stk,(*data).rectangulars,
+                              (*data).spheres, (*data).lights, object_color,
                               MAX_REFLECTION_BOUNCES)) {
                     r += object_color[0];
                     g += object_color[1];

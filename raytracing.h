@@ -6,7 +6,7 @@
 
 pthread_t THREAD[4];
 
-typedef struct __ARG{
+typedef struct __ARG {
     uint8_t *pixels;
     color background;
     rectangular_node rectangulars;
@@ -15,7 +15,7 @@ typedef struct __ARG{
     const viewpoint *View;
     int row;
     int col;
-}arg;
+} arg;
 
 void raytracing(void* args);
 

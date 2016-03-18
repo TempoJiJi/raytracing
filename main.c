@@ -33,7 +33,7 @@ static double diff_in_second(struct timespec t1, struct timespec t2)
 }
 
 int main()
-{  
+{
     arg data;
     light_node lights = NULL;
     rectangular_node rectangulars = NULL;
@@ -58,16 +58,16 @@ int main()
     /* do the ray tracing with the given geometry */
     clock_gettime(CLOCK_REALTIME, &start);
 
-    for(int i=0;i<4;i++){
-    	if(pthread_create(&THREAD[i],NULL,(void*)raytracing,(void*)&data)){
-	    printf("ERROR thread create!\n");
-	    pthread_exit(NULL);
-	}
+    for(int i=0; i<4; i++) {
+        if(pthread_create(&THREAD[i],NULL,(void*)raytracing,(void*)&data)) {
+            printf("ERROR thread create!\n");
+            pthread_exit(NULL);
+        }
     }
-    
-    for(int i=0;i<4;i++)
-	pthread_join(THREAD[i],NULL);
-    
+
+    for(int i=0; i<4; i++)
+        pthread_join(THREAD[i],NULL);
+
     clock_gettime(CLOCK_REALTIME, &end);
     {
         FILE *outfile = fopen(OUT_FILENAME, "wb");
@@ -79,7 +79,7 @@ int main()
     delete_sphere_list(&data.spheres);
     delete_light_list(&data.lights);
     free(data.pixels);
-    
+
     printf("Done!\n");
     printf("Execution time of raytracing() : %lf sec\n", diff_in_second(start, end));
     return 0;
